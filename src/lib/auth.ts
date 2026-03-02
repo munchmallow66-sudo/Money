@@ -8,6 +8,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  trustHost: true,
   // Pure JWT strategy — no PrismaAdapter required
   // Users are synced to the database manually in the signIn callback
   providers: [
