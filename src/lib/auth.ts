@@ -3,11 +3,18 @@ import Google from 'next-auth/providers/google';
 import { prisma } from './prisma';
 
 // Ensure AUTH_URL is set for Vercel deployments (since .env is gitignored)
-if (!process.env.AUTH_URL && process.env.VERCEL_URL) {
-  process.env.AUTH_URL = `https://${process.env.VERCEL_URL}`;
+// Use VERCEL_PROJECT_PRODUCTION_URL (stable production domain) over VERCEL_URL (per-deploy URL)
+if (!process.env.AUTH_URL) {
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  if (vercelUrl) {
+    process.env.AUTH_URL = `https://${vercelUrl}`;
+  }
 }
-if (!process.env.NEXTAUTH_URL && process.env.VERCEL_URL) {
-  process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+if (!process.env.NEXTAUTH_URL) {
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  if (vercelUrl) {
+    process.env.NEXTAUTH_URL = `https://${vercelUrl}`;
+  }
 }
 
 export const {
