@@ -11,6 +11,10 @@ const nextConfig = {
   images: {
     domains: ["lh3.googleusercontent.com"],
   },
+  env: {
+    AUTH_URL: process.env.AUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
+  },
 };
 
 const pwaConfig = withPWA({
