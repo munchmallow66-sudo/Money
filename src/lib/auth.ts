@@ -8,9 +8,12 @@ import { prisma } from './prisma';
 // Ensure AUTH_SECRET, GOOGLE_CLIENT_ID, and GOOGLE_CLIENT_SECRET are set in the Vercel dashboard.
 // For local development, set AUTH_URL and NEXTAUTH_URL to localhost if not already defined.
 if (process.env.VERCEL) {
-  // FORCE Production URL on Vercel - Overrides any misconfigured localhost variable on Vercel
-  process.env.AUTH_URL = 'https://moneysummary.vercel.app';
-  process.env.NEXTAUTH_URL = 'https://moneysummary.vercel.app';
+  // Use dynamic Vercel production URL so it works with any new Vercel project you create
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  if (vercelUrl) {
+    process.env.AUTH_URL = `https://${vercelUrl}`;
+    process.env.NEXTAUTH_URL = `https://${vercelUrl}`;
+  }
 } else {
   if (!process.env.AUTH_URL && process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3000;
