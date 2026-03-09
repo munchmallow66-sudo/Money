@@ -1,5 +1,14 @@
 import withPWA from "next-pwa";
 
+// ── Auto-detect production URL on Vercel ──────────────────────────
+const vercelUrl =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+if (vercelUrl && !process.env.AUTH_URL) {
+  process.env.AUTH_URL = `https://${vercelUrl}`;
+  process.env.NEXTAUTH_URL = `https://${vercelUrl}`;
+}
+// ──────────────────────────────────────────────────────────────────
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -10,6 +19,12 @@ const nextConfig = {
   },
   images: {
     domains: ["lh3.googleusercontent.com"],
+  },
+  env: {
+    // Make AUTH_URL available to all server & client code at build-time
+    AUTH_URL: process.env.AUTH_URL || "",
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || "",
+    AUTH_TRUST_HOST: "true",
   },
 };
 
