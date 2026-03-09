@@ -7,22 +7,13 @@ import { prisma } from './prisma';
 // Auth.js v5 automatically infers AUTH_URL on Vercel deployments.
 // Ensure AUTH_SECRET, GOOGLE_CLIENT_ID, and GOOGLE_CLIENT_SECRET are set in the Vercel dashboard.
 // For local development, set AUTH_URL and NEXTAUTH_URL to localhost if not already defined.
-if (process.env.VERCEL) {
-  // Use dynamic Vercel production URL so it works with any new Vercel project you create
-  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-  if (vercelUrl) {
-    process.env.AUTH_URL = `https://${vercelUrl}`;
-    process.env.NEXTAUTH_URL = `https://${vercelUrl}`;
-  }
-} else {
-  if (!process.env.AUTH_URL && process.env.NODE_ENV === 'development') {
-    const port = process.env.PORT || 3000;
-    process.env.AUTH_URL = `http://localhost:${port}`;
-  }
-  if (!process.env.NEXTAUTH_URL && process.env.NODE_ENV === 'development') {
-    const port = process.env.PORT || 3000;
-    process.env.NEXTAUTH_URL = `http://localhost:${port}`;
-  }
+if (!process.env.AUTH_URL && process.env.NODE_ENV === 'development') {
+  const port = process.env.PORT || 3000;
+  process.env.AUTH_URL = `http://localhost:${port}`;
+}
+if (!process.env.NEXTAUTH_URL && process.env.NODE_ENV === 'development') {
+  const port = process.env.PORT || 3000;
+  process.env.NEXTAUTH_URL = `http://localhost:${port}`;
 }
 
 export const {
@@ -58,18 +49,7 @@ export const {
     error: '/',
     newUser: '/dashboard',
   },
-  cookies: {
-    pkceCodeVerifier: {
-      name: 'authjs.pkce.code_verifier',
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 900,
-      },
-    },
-  },
+
   callbacks: {
     // JWT callback: persist the database user ID into the token
     jwt: async ({ token, user, account, profile }) => {
