@@ -23,7 +23,7 @@ export default async function middleware(req: NextRequest) {
     nextUrl.pathname.startsWith('/categories') ||
     nextUrl.pathname.startsWith('/budgets') ||
     nextUrl.pathname.startsWith('/settings') ||
-    (nextUrl.pathname.startsWith('/api') && !isApiAuthRoute && nextUrl.pathname !== '/api/debug-env' && nextUrl.pathname !== '/api/debug2');
+    (nextUrl.pathname.startsWith('/api') && !isApiAuthRoute && nextUrl.pathname !== '/api/debug-env' && nextUrl.pathname !== '/api/debug2' && nextUrl.pathname !== '/api/health');
 
   // Allow API auth routes and public assets
   if (isApiAuthRoute || nextUrl.pathname.match(/\.(js|css|png|svg|json|ico)$/)) {
