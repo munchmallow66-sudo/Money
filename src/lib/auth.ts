@@ -4,14 +4,17 @@ import { prisma } from './prisma';
 
 // Auth.js v5 automatically infers AUTH_URL on Vercel deployments.
 // Ensure AUTH_SECRET, GOOGLE_CLIENT_ID, and GOOGLE_CLIENT_SECRET are set in the Vercel dashboard.
-// Auth.js v5 automatically infers AUTH_URL on Vercel deployments.
-// Ensure AUTH_SECRET, GOOGLE_CLIENT_ID, and GOOGLE_CLIENT_SECRET are set in the Vercel dashboard.
-// For local development, set AUTH_URL and NEXTAUTH_URL to localhost if not already defined.
-if (!process.env.AUTH_URL && process.env.NODE_ENV === 'development') {
+if (process.env.VERCEL) {
+  process.env.AUTH_TRUST_HOST = 'true';
+  process.env.AUTH_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL 
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` 
+    : 'https://moneysummary.vercel.app';
+  process.env.NEXTAUTH_URL = process.env.AUTH_URL;
+} else if (!process.env.AUTH_URL && process.env.NODE_ENV === 'development') {
   const port = process.env.PORT || 3000;
   process.env.AUTH_URL = `http://localhost:${port}`;
 }
-if (!process.env.NEXTAUTH_URL && process.env.NODE_ENV === 'development') {
+if (!process.env.VERCEL && !process.env.NEXTAUTH_URL && process.env.NODE_ENV === 'development') {
   const port = process.env.PORT || 3000;
   process.env.NEXTAUTH_URL = `http://localhost:${port}`;
 }
