@@ -4,6 +4,24 @@ import { prisma } from './prisma';
 
 const isDev = process.env.NODE_ENV === 'development';
 
+// ── Auto-detect production URL on Vercel ──────────────────────────
+// Auth.js v5 reads AUTH_URL at module-load time. If .env is not
+// deployed (gitignored), AUTH_URL will be undefined and Auth.js
+// falls back to http://localhost:3000.  Fix: derive the URL from
+// Vercel's built-in env vars before NextAuth() executes.
+if (!isDev && !process.env.AUTH_URL) {
+  const vercelUrl =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL || // e.g. moneysummary.vercel.app
+    process.env.VERCEL_URL;                      // e.g. money-summary-xyz.vercel.app
+  if (vercelUrl) {
+    const url = `https://${vercelUrl}`;
+    process.env.AUTH_URL = url;
+    process.env.NEXTAUTH_URL = url;
+    console.log(`[Auth] Auto-set AUTH_URL = ${url}`);
+  }
+}
+// ──────────────────────────────────────────────────────────────────
+
 export const {
   handlers: { GET, POST },
   auth,
