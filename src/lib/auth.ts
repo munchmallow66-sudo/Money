@@ -4,16 +4,6 @@ import { prisma } from './prisma';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-if (!isDev) {
-  process.env.AUTH_URL = 'https://moneysummary.vercel.app';
-  process.env.NEXTAUTH_URL = 'https://moneysummary.vercel.app';
-  process.env.AUTH_TRUST_HOST = 'true';
-} else {
-  const port = process.env.PORT || 3000;
-  process.env.AUTH_URL = process.env.AUTH_URL || `http://localhost:${port}`;
-  process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL || `http://localhost:${port}`;
-}
-
 export const {
   handlers: { GET, POST },
   auth,
@@ -21,6 +11,7 @@ export const {
   signOut,
 } = NextAuth({
   trustHost: true,
+  basePath: '/api/auth',
   // Pure JWT strategy — no PrismaAdapter required
   // Users are synced to the database manually in the signIn callback
   providers: [
