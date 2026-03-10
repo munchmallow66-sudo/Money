@@ -16,8 +16,12 @@ export default async function Home() {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12 md:py-20">
         <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6">
-            <Wallet className="w-8 h-8 text-primary" />
+          <div className="inline-flex items-center justify-center mb-6">
+            <img 
+              src="/logo.png" 
+              alt="Money Summary Logo" 
+              className="w-32 h-32 md:w-40 md:h-40 drop-shadow-xl"
+            />
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             Money Summary
