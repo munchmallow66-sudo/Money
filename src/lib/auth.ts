@@ -66,12 +66,6 @@ export const {
         try {
           const email = profile.email!;
 
-          // Check if user already exists before upsert
-          const existingUser = await prisma.user.findUnique({
-            where: { email },
-          });
-          const isNewUser = !existingUser;
-
           const dbUser = await prisma.user.upsert({
             where: { email },
             update: {
@@ -84,16 +78,20 @@ export const {
               image: (profile as any).picture ?? (profile as any).image ?? null,
             },
           });
-          token.sub = dbUser.id; // Use the database cuid as user ID
+          token.sub = dbUser.id;
           token.email = dbUser.email;
           token.name = dbUser.name;
           token.picture = dbUser.image;
           console.log(`[Auth] Synced user to DB: ${dbUser.email} (${dbUser.id})`);
 
-          // Create default categories for new users
+          // Create default categories for new users (non-blocking)
+          // Check by createdAt proximity — if created within last 10 seconds, it's new
+          const isNewUser = (Date.now() - new Date(dbUser.createdAt).getTime()) < 10000;
           if (isNewUser) {
             console.log(`[Auth] New user detected, creating default categories...`);
-            await createDefaultCategories(dbUser.id);
+            createDefaultCategories(dbUser.id).catch((err) =>
+              console.error('[Auth] Default categories error:', err)
+            );
           }
         } catch (error) {
           console.error('[Auth] Failed to sync user to DB:', error);
