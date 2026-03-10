@@ -12,25 +12,27 @@ const prismaClientSingleton = () => {
   // Only use Neon adapter in production (Vercel/serverless)
   // In development, use standard PrismaClient for better performance
   if (process.env.NODE_ENV === 'production' && databaseUrl && databaseUrl.includes('neon.tech')) {
-    console.log('[Prisma] Using Neon adapter for production');
+    console.log('[Prisma] Using Neon adapter for production (DATABASE_URL found)');
     try {
       const pool = new Pool({ connectionString: databaseUrl } as any);
       const adapter = new PrismaNeon(pool as any);
-      return new PrismaClient({
+      const client = new PrismaClient({
         adapter,
-        log: ['error'],
+        log: ['error', 'warn'],
       });
+      console.log('[Prisma] Neon adapter PrismaClient created successfully');
+      return client;
     } catch (error) {
-      console.error('[Prisma] Failed to initialize Neon adapter:', error instanceof Error ? error.message : error);
+      console.error('[Prisma] CRITICAL: Failed to initialize Neon adapter:', error);
     }
   }
 
   // Use standard PrismaClient for local development or fallback
-  console.log('[Prisma] Using standard PrismaClient');
+  console.log('[Prisma] Using standard PrismaClient strategy');
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development'
       ? ['query', 'error', 'warn']
-      : ['error'],
+      : ['error', 'warn'],
   });
 };
 
