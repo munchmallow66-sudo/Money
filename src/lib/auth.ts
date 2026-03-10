@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import { prisma } from './prisma';
+import { createDefaultCategories } from './default-categories';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -64,6 +65,13 @@ export const {
         // On sign-in, upsert user to DB and store the DB user ID in the token
         try {
           const email = profile.email!;
+
+          // Check if user already exists before upsert
+          const existingUser = await prisma.user.findUnique({
+            where: { email },
+          });
+          const isNewUser = !existingUser;
+
           const dbUser = await prisma.user.upsert({
             where: { email },
             update: {
@@ -81,6 +89,12 @@ export const {
           token.name = dbUser.name;
           token.picture = dbUser.image;
           console.log(`[Auth] Synced user to DB: ${dbUser.email} (${dbUser.id})`);
+
+          // Create default categories for new users
+          if (isNewUser) {
+            console.log(`[Auth] New user detected, creating default categories...`);
+            await createDefaultCategories(dbUser.id);
+          }
         } catch (error) {
           console.error('[Auth] Failed to sync user to DB:', error);
           // Fallback: use the provider's user ID (may cause FK issues)

@@ -12,6 +12,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed-categories": "tsx scripts/seed-default-categories.ts",
     "test": "vitest"
   },
   "dependencies": {
