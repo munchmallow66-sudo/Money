@@ -28,6 +28,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   trustHost: true,
   basePath: '/api/auth',
   // Pure JWT strategy — no PrismaAdapter required
@@ -36,7 +37,6 @@ export const {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      checks: ['pkce'],
       authorization: {
         params: {
           prompt: 'consent',

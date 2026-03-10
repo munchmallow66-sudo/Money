@@ -5,9 +5,11 @@ import type { NextRequest } from 'next/server';
 export default async function middleware(req: NextRequest) {
   const { nextUrl, cookies } = req;
   
-  // Check for auth session cookie
+  // Check for auth session cookie (supporting both authjs and next-auth cookie names)
   const sessionCookie = cookies.get('authjs.session-token')?.value || 
-                        cookies.get('__Secure-authjs.session-token')?.value;
+                        cookies.get('__Secure-authjs.session-token')?.value ||
+                        cookies.get('next-auth.session-token')?.value ||
+                        cookies.get('__Secure-next-auth.session-token')?.value;
   const isLoggedIn = !!sessionCookie;
   
   const isApiAuthRoute = nextUrl.pathname.startsWith('/api/auth');
@@ -44,5 +46,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\.(?:png|svg|js|css)$).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|svg|js|css)$).*)'],
 };
