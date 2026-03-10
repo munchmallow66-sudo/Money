@@ -31,10 +31,14 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({ categories });
-  } catch (error) {
+  } catch (error: any) {
     console.error('GET /api/categories error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error', 
+        message: error?.message || 'Unknown error',
+        stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      },
       { status: 500 }
     );
   }
@@ -89,10 +93,14 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ category }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('POST /api/categories error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        message: error?.message || 'Unknown error',
+        stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      },
       { status: 500 }
     );
   }
