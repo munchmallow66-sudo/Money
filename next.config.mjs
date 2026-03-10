@@ -47,6 +47,11 @@ const pwaConfig = withPWA({
   maximumFileSizeToCacheInBytes: 5000000, // 5MB
   runtimeCaching: [
     {
+      // Auth routes must NEVER be cached
+      urlPattern: /\/api\/auth\/.*/,
+      handler: "NetworkOnly",
+    },
+    {
       urlPattern: /^https?.*/,
       handler: "NetworkFirst",
       options: {
@@ -103,7 +108,7 @@ const pwaConfig = withPWA({
       },
     },
     {
-      urlPattern: /\/api\/.*/,
+      urlPattern: /\/api\/(?!auth).*/,
       handler: "NetworkFirst",
       options: {
         cacheName: "api-cache",
