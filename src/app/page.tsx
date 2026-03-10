@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Wallet, TrendingUp, PieChart, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoginButton } from "./login-button";
+import Image from "next/image";
 
 export default async function Home() {
   const session = await auth();
@@ -16,12 +17,18 @@ export default async function Home() {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12 md:py-20">
         <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center justify-center mb-6">
-            <img 
-              src="/logo.png" 
-              alt="Money Summary Logo" 
-              className="w-32 h-32 md:w-40 md:h-40 drop-shadow-xl"
-            />
+          <div className="inline-flex items-center justify-center mb-8 relative group">
+            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full group-hover:bg-primary/30 transition-colors duration-500"></div>
+            <div className="relative bg-background/50 p-6 md:p-8 rounded-[2.5rem] border border-white/10 shadow-2xl backdrop-blur-xl group-hover:scale-105 group-hover:shadow-primary/25 transition-all duration-500">
+              <Image 
+                src="/logo.png" 
+                alt="Money Summary Logo" 
+                width={160}
+                height={160}
+                priority
+                className="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-2xl"
+              />
+            </div>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             Money Summary

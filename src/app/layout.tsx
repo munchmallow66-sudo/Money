@@ -11,7 +11,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Money Summary - บันทึกรายรับรายจ่าย",
   description: "ระบบบันทึกรายรับรายจ่ายส่วนตัว จัดการการเงินได้ง่าย ๆ",
+  applicationName: "Money Summary",
   manifest: "/manifest.json",
+  formatDetection: { telephone: false },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -25,6 +27,8 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/icons/icon-72x72.png", sizes: "72x72", type: "image/png" },
       { url: "/icons/icon-96x96.png", sizes: "96x96", type: "image/png" },
       { url: "/icons/icon-128x128.png", sizes: "128x128", type: "image/png" },
@@ -35,10 +39,12 @@ export const metadata: Metadata = {
       { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
+      { url: "/apple-touch-icon.png" },
+      { url: "/icons/icon-152x152.png", sizes: "152x152" },
       { url: "/icons/icon-192x192.png", sizes: "192x192" },
       { url: "/icons/icon-512x512.png", sizes: "512x512" },
     ],
-    shortcut: ["/icons/icon-192x192.png"],
+    shortcut: ["/apple-touch-icon.png"],
   },
   other: {
     "msapplication-TileColor": "#0f172a",
@@ -65,21 +71,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th" suppressHydrationWarning>
-      <head>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Money Summary" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="application-name" content="Money Summary" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="theme-color" content="#0f172a" />
-      </head>
+      <head />
       <body className={inter.className}>
         <SessionProvider>
           <ThemeProvider

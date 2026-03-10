@@ -101,13 +101,13 @@ export function PWAInstallPrompt() {
 
   return (
     <Dialog open={showInstallDialog} onOpenChange={setShowInstallDialog}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" aria-describedby="pwa-install-description">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Smartphone className="h-5 w-5 text-primary" />
             ติดตั้ง Money Summary
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription id="pwa-install-description">
             ติดตั้งแอปเพื่อเข้าถึงได้เร็วขึ้นและใช้งานได้แม้ไม่มีอินเทอร์เน็ต
           </DialogDescription>
         </DialogHeader>
