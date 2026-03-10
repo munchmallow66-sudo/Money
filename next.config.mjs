@@ -33,10 +33,6 @@ const pwaConfig = withPWA({
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === "development",
-  fallbacks: {
-    document: "/offline",
-    image: "/icons/icon-192x192.png",
-  },
   buildExcludes: [
     /middleware-manifest\.json$/,
     /_buildManifest\.js$/,
